@@ -67,3 +67,7 @@ Records belong to the company; contact/booking data are private to authenticated
 - Anonymous request to staff records: 401. Viewer update: 403. Stale staff update: 409. Authorized status update: saved version increment and audit entry.
 - Empty gallery: honest empty state; filter/search reset works.
 - Public routes: distinct title/description, English LTR, keyboard navigation and no horizontal overflow from 360px upward.
+
+## Railway
+
+See [RAILWAY.md](RAILWAY.md) for the root Docker deployment. This deployment applies the repeatable schema during startup under a PostgreSQL advisory lock, optionally provisions an initial staff account, and listens on Railway’s injected `PORT`. The container starts as a non-root user and excludes local credentials.

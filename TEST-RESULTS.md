@@ -10,3 +10,10 @@
 - Cloud installation script: executed successfully against the prepared environment; frozen dependency installation, repeatable schema application, unit checks and build passed. The default test command explicitly skips the integration suite unless its running-app configuration is supplied.
 
 Screenshots are in `/workspace/artifacts/open-energy-desktop.png` and `/workspace/artifacts/open-energy-mobile.png`. The running site and saved environment draft have been validated; public deployment and restoration into a fresh cloud task have not been performed.
+
+## Railway deployment configuration
+
+- Production Docker image built successfully with Node.js 24 and development dependencies pruned. The local build required the environment’s existing verified proxy CA and proxy-host resolution; these are build-time options, not included in the deployed image.
+- The image ran as a non-root user against a separate PostgreSQL 17 container. Runtime smoke checks passed for the injected port, Railway public-domain origin fallback, schema initialization, booking persistence, initial admin provisioning, HTTPS session-cookie attributes, static CSS and exclusion of real `.env` files.
+- The production startup script also passed the existing 11 API/database integration checks against the prepared local database.
+- These are local deployment-artifact checks. No deployment into a Railway account or public Railway URL has been performed.

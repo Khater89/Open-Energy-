@@ -20,6 +20,10 @@ Requires Node.js 22+ and PostgreSQL 17+.
 
 For production, run `npm run build --prefix frontend`, then `npm start --prefix frontend`. The website requires a Node.js service and PostgreSQL; GitHub Pages cannot run the booking API or staff workspace.
 
+## Deploy to Railway
+
+See [RAILWAY.md](RAILWAY.md) for GitHub deployment, private PostgreSQL binding, initial staff provisioning and a public HTTPS domain. Keep the Railway service root at the repository root; `railway.json` and `Dockerfile` configure the build and startup.
+
 ## Staff access
 
 Visit `/admin`. Provision staff accounts with `scripts/create-admin.mjs`, supplying `ADMIN_EMAIL` and `ADMIN_PASSWORD` securely as described in [SETUP.md](SETUP.md). No shared default password is included.
