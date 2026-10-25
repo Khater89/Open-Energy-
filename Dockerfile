@@ -2,9 +2,7 @@ FROM node:24-bookworm-slim AS build
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
 COPY frontend/package.json frontend/package-lock.json ./frontend/
-RUN --mount=type=secret,id=proxy_ca \
-    if [ -f /run/secrets/proxy_ca ]; then export NODE_EXTRA_CA_CERTS=/run/secrets/proxy_ca; fi; \
-    npm ci --prefix frontend --no-audit --no-fund --fetch-retries=1 --fetch-timeout=30000 --loglevel=http
+RUN npm ci --prefix frontend --no-audit --no-fund
 COPY frontend/ ./frontend/
 RUN npm run build --prefix frontend
 RUN npm prune --prefix frontend --omit=dev --no-audit --no-fund

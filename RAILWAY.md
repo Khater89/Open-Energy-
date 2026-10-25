@@ -27,3 +27,7 @@ Public pages can build without database credentials. The runtime readiness check
 - **Application failed to respond**: check the web service's generated domain target port matches its `PORT`; inspect startup logs without posting secrets.
 
 No Railway deployment or public domain is created merely by committing these files. The project must be connected in the user's Railway account. Railway plan and usage charges are controlled by Railway.
+
+## Dockerfile validation
+
+The production Dockerfile does not require any build secrets or `RUN --mount` directives. Do not add `proxy_ca` to Railway variables: that certificate was only needed by the local onboarding network, not Railway. When retrying a validation failure, deploy the latest `main` commit rather than rebuilding an older failed commit. Keep the service root at `/`.

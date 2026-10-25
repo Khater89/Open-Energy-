@@ -17,3 +17,7 @@ Screenshots are in `/workspace/artifacts/open-energy-desktop.png` and `/workspac
 - The image ran as a non-root user against a separate PostgreSQL 17 container. Runtime smoke checks passed for the injected port, Railway public-domain origin fallback, schema initialization, booking persistence, initial admin provisioning, HTTPS session-cookie attributes, static CSS and exclusion of real `.env` files.
 - The production startup script also passed the existing 11 API/database integration checks against the prepared local database.
 - These are local deployment-artifact checks. No deployment into a Railway account or public Railway URL has been performed.
+
+## Railway validation correction
+
+Removed the local-only `proxy_ca` build-secret mount from the production Dockerfile. `docker build --check .` passes with no warnings on the corrected file. This is a Dockerfile validation check; a successful new Railway build is not yet verified. Runtime application logic and database initialization are unchanged.
