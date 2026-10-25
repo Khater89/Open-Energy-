@@ -25,3 +25,11 @@ Removed the local-only `proxy_ca` build-secret mount from the production Dockerf
 ## Database startup readiness
 
 Added a bounded retry for transient PostgreSQL DNS, connection refusal and initialization errors. Credential and schema errors fail without retry. All 25 validation/integration/readiness checks pass with the running app/database configured. A real PostgreSQL migration also recovered through a local endpoint that became available after startup. Dockerfile validation passes with the new readiness helper included in the runtime image. A successful connection to the user's Railway PostgreSQL service remains unverified and depends on the service state and correct variable reference.
+
+## Contact, motion and concept gallery update
+
+- Production build and TypeScript passed with the new contact data, motion effects, local concept images and lightbox.
+- Existing browser smoke passed all eight routes at 360/768/1440px, booking validation/failure/retry/save, contact save and protected staff management. Automated WCAG A/AA checks returned no violations after the scroll reveals settled.
+- Additional public-experience checks passed for both phone/WhatsApp destinations, email links, WhatsApp keyboard and outside-click dismissal, concept labels, keyboard image navigation, modal focus containment, scroll reveal, reading progress, reduced-motion changes and content visibility with JavaScript disabled. Expanded WhatsApp and lightbox accessibility checks returned no violations.
+- Reference research and image provenance are documented in DESIGN-NOTES.md. The new images are illustrative concepts approved by the owner, not verified company installations.
+- These are local browser/build checks; the new Railway deployment must still complete before the public site shows the update.

@@ -53,9 +53,9 @@ Records belong to the company; contact/booking data are private to authenticated
 
 ## Content and launch decisions
 
-- No customer testimonials, certifications, completed projects, service regions, phone numbers or office details have been invented. The gallery starts empty; the contact page explains that coverage is confirmed individually.
+- No customer testimonials, certifications, completed projects, service regions, phone numbers or office details have been invented. The verified company-project gallery starts empty; a separate, clearly labeled concept gallery contains illustrative AI-generated imagery. The supplied email and both mobile/WhatsApp numbers are shown on the contact page and footer, with a floating WhatsApp chooser. Coverage is confirmed individually.
 - The hero image is AI-generated illustrative imagery, labeled as such, and is not evidence of company installations. `frontend/public/images/solar-farm.webp` is the optimized image. Fonts are local via Fontsource; icons use Lucide.
-- Final company contact details, coverage, authorized project photos, logo approval, production hosting, staff accounts and data-retention policy are needed for a public launch.
+- Company contact details have been supplied by the owner. Final coverage, authorized project photos, logo approval, staff accounts and data-retention policy remain to be confirmed before public launch.
 - Admin project/service CRUD is outside MVP; add verified projects via an authorized database workflow. Do not seed invented portfolio records.
 - Future bilingual support: `frontend/lib/content.ts` holds structured service/FAQ content, semantic layout declares `lang`/`dir`, and component boundaries separate content from interaction. English is implemented now. Arabic translation/routing is a future change, not a currently working language toggle.
 
@@ -71,3 +71,7 @@ Records belong to the company; contact/booking data are private to authenticated
 ## Railway
 
 See [RAILWAY.md](RAILWAY.md) for the root Docker deployment. This deployment applies the repeatable schema during startup under a PostgreSQL advisory lock, optionally provisions an initial staff account, and listens on Railway’s injected `PORT`. The container starts as a non-root user and excludes local credentials.
+
+## Public design and contact updates
+
+Contact data is centralized in `frontend/lib/company.ts`. The numbers use Jordan’s +962 country code for telephone and WhatsApp links. Scroll reveals, image interactions, a keyboard-accessible concept lightbox and the floating contact chooser support reduced-motion preferences. See [DESIGN-NOTES.md](DESIGN-NOTES.md) for sources actually reviewed and image provenance. Run `INTEGRATION_BASE_URL=http://localhost:3000 node tests/public-experience.mjs` for the contact, gallery keyboard, motion and no-JavaScript checks.

@@ -9,6 +9,8 @@ import "@fontsource/dm-sans/latin-700.css";
 import type { Metadata } from "next";
 import { Header, Footer } from "@/components/site";
 import "./globals.css";
+import ContactDock from "@/components/contact-dock";
+import MotionEffects from "@/components/motion-effects";
 export const metadata: Metadata = {
   title: {
     default: "Open Energy — A brighter way to power your world",
@@ -24,9 +26,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <a className="skip-link" href="#main">
           Skip to content
         </a>
+        <MotionEffects />
         <Header />
         <main id="main">{children}</main>
         <Footer />
+        <ContactDock />
       </body>
     </html>
   );

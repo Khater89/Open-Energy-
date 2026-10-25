@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { services, faqs } from "@/lib/content";
 import { ServiceIcon, CTA, FaqList } from "@/components/site";
+import SolarInspiration from "@/components/solar-inspiration";
 export default function Home() {
   return (
     <>
@@ -223,6 +224,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <SolarInspiration />
       <section className="section process-section">
         <div className="container">
           <div className="section-heading">

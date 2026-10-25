@@ -34,6 +34,6 @@ Run `npm run typecheck --prefix frontend` and `npm test --prefix frontend`. Inte
 
 ## Launch content
 
-Company contact details, service regions and authorized project photography must be supplied before public launch. The gallery starts empty, and the solar landscape is labeled illustrative imagery. Booking requests are saved for staff review, not automatically confirmed appointments.
+The supplied company email and both mobile/WhatsApp numbers are live in the contact page and footer. A floating WhatsApp chooser opens either number. Clearly labeled AI-generated solar concepts appear separately from the verified company-project portfolio; service regions and authorized photography for actual company projects remain to be supplied. Booking requests are saved for staff review, not automatically confirmed appointments.
 
 See [SETUP.md](SETUP.md) for full configuration, API contracts, roles, deployment instructions and implementation decisions.

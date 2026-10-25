@@ -156,9 +156,25 @@ try {
     "",
   );
   console.log("PASS: project filters and clear state");
+  async function revealAll() {
+    for (
+      let y = 0;
+      y < (await page.evaluate(() => document.documentElement.scrollHeight));
+      y += 600
+    ) {
+      await page.evaluate(
+        (top) => window.scrollTo({ top, behavior: "instant" }),
+        y,
+      );
+      await page.waitForTimeout(80);
+    }
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+    await page.waitForTimeout(850);
+  }
   const violations = [];
   for (const path of ["/", "/book", "/contact", "/admin"]) {
     await page.goto(base + path, { waitUntil: "networkidle" });
+    await revealAll();
     const results = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
       .analyze();
@@ -180,6 +196,19 @@ try {
   await mkdir("/workspace/artifacts", { recursive: true });
   await page.goto(base);
   await page.setViewportSize({ width: 1440, height: 1000 });
+  for (
+    let y = 0;
+    y < (await page.evaluate(() => document.documentElement.scrollHeight));
+    y += 700
+  ) {
+    await page.evaluate(
+      (top) => window.scrollTo({ top, behavior: "instant" }),
+      y,
+    );
+    await page.waitForTimeout(90);
+  }
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+  await page.waitForTimeout(700);
   await page.screenshot({
     path: "/workspace/artifacts/open-energy-desktop.png",
     fullPage: true,

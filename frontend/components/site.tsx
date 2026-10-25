@@ -15,7 +15,10 @@ import {
   Leaf,
   ShieldCheck,
   ChevronDown,
+  Mail,
+  Phone,
 } from "lucide-react";
+import { company } from "@/lib/company";
 export const Arrow = ArrowUpRight;
 export function Logo() {
   return (
@@ -39,9 +42,16 @@ export function Header() {
         <span>
           <Leaf size={13} /> A brighter future starts with better energy.
         </span>
-        <Link href="/book">
-          Let’s make the switch <ArrowUpRight size={13} />
-        </Link>
+        <div className="announcement-contact">
+          <a href={`mailto:${company.email}`}>
+            <Mail size={12} />
+            {company.email}
+          </a>
+          <a href={`tel:${company.phones[0].international}`}>
+            <Phone size={12} />
+            <span dir="ltr">{company.phones[0].local}</span>
+          </a>
+        </div>
       </div>
       <header className="site-header">
         <div className="container header-inner">
@@ -109,13 +119,21 @@ export function Footer() {
             <Link href="/contact">Send an inquiry</Link>
             <Link href="/faq">Frequently asked questions</Link>
           </div>
-          <div className="footer-message">
-            <Sun size={26} />
-            <p>
-              Good for your space.
-              <br />
-              <strong>Better for our planet.</strong>
-            </p>
+          <div className="footer-contact">
+            <h3>Let’s talk solar</h3>
+            <a className="footer-email" href={`mailto:${company.email}`}>
+              <Mail size={14} />
+              <span>{company.email}</span>
+            </a>
+            {company.phones.map((phone) => (
+              <a href={`tel:${phone.international}`} key={phone.local}>
+                <Phone size={14} />
+                <span dir="ltr">{phone.local}</span>
+              </a>
+            ))}
+            <Link href="/contact" className="footer-contact-link">
+              All contact options <ArrowUpRight size={13} />
+            </Link>
           </div>
         </div>
         <div className="footer-bottom">
