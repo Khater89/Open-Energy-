@@ -64,10 +64,43 @@ const server = spawn(
   ],
   { cwd: resolve("frontend"), env, stdio: "inherit" },
 );
+let stopping = false;
+let worker;
+let restartTimer;
+function startWorker() {
+  worker = spawn(
+    process.execPath,
+    [resolve("scripts/notification-worker.mjs")],
+    { env, stdio: "inherit" },
+  );
+  worker.on("error", () =>
+    console.error("Could not launch the notification worker."),
+  );
+  worker.on("exit", () => {
+    if (!stopping) {
+      console.error("Notification worker stopped; restarting in five seconds.");
+      restartTimer = setTimeout(startWorker, 5000);
+    }
+  });
+}
+startWorker();
 for (const signal of ["SIGTERM", "SIGINT"])
-  process.on(signal, () => server.kill(signal));
+  process.on(signal, () => {
+    stopping = true;
+    clearTimeout(restartTimer);
+    worker?.kill(signal);
+    server.kill(signal);
+  });
 server.on("error", () => {
+  stopping = true;
+  clearTimeout(restartTimer);
+  worker?.kill();
   console.error("Could not start the web server.");
   process.exit(1);
 });
-server.on("exit", (code) => process.exit(code ?? 0));
+server.on("exit", (code) => {
+  stopping = true;
+  clearTimeout(restartTimer);
+  worker?.kill();
+  process.exit(code ?? 0);
+});

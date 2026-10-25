@@ -33,7 +33,7 @@ Cloud-specific repeatable setup: `bash scripts/setup-cloud.sh`. It uses signed D
 
 Deploy `frontend/` as a Node.js Next.js service with authenticated PostgreSQL (TLS with certificate verification), then apply `backend/schema.sql`. Set `DATABASE_URL` and the exact HTTPS `SITE_URL`; the latter controls origin validation and Secure session cookies. Start with `npm start` from `frontend/`, behind your HTTPS reverse proxy. Migrations are an explicit deployment step, not run per request. Review database backups, least-privilege database roles and a company-approved retention policy before public launch.
 
-There is no standalone HTML build and opening a file does not run server features. Public pages render without external APIs; forms, projects and admin require the Node service and PostgreSQL. Email, WhatsApp, payments, customer accounts and notifications are not integrated. A saved request is available to authenticated staff, not delivered to a fabricated inbox.
+There is no standalone HTML build and opening a file does not run server features. Public pages render without external APIs; forms, projects and admin require the Node service and PostgreSQL. Email alerts for new requests are implemented through Resend and a PostgreSQL outbox; they require securely configured sender credentials. WhatsApp is click-to-chat only. Payments and customer accounts are not integrated. A saved request is available to authenticated staff; actual email acceptance is shown separately in the staff notification panel.
 
 ## API and data contracts
 
@@ -75,3 +75,7 @@ See [RAILWAY.md](RAILWAY.md) for the root Docker deployment. This deployment app
 ## Public design and contact updates
 
 Contact data is centralized in `frontend/lib/company.ts`. The numbers use Jordan’s +962 country code for telephone and WhatsApp links. Scroll reveals, image interactions, a keyboard-accessible concept lightbox and the floating contact chooser support reduced-motion preferences. See [DESIGN-NOTES.md](DESIGN-NOTES.md) for sources actually reviewed and image provenance. Run `INTEGRATION_BASE_URL=http://localhost:3000 node tests/public-experience.mjs` for the contact, gallery keyboard, motion and no-JavaScript checks.
+
+## New-request email notifications
+
+See [EMAIL-NOTIFICATIONS.md](EMAIL-NOTIFICATIONS.md). The production startup script now supervises a separate notification worker alongside Next.js. `RESEND_API_KEY` and `NOTIFICATION_FROM` must be configured securely before real sending can be verified; no real email has been sent during local tests. Request storage and queue insertion share a transaction, and UI submission success means saved, not inbox delivery.

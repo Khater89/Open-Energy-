@@ -9,6 +9,7 @@ import {
   Eye,
   X,
 } from "lucide-react";
+import NotificationPanel from "./notification-panel";
 import { statuses } from "@/lib/content";
 type User = { name: string; role: string };
 type RequestRecord = {
@@ -236,6 +237,7 @@ export default function Admin() {
           Sign out <LogOut size={15} />
         </button>
       </div>
+      <NotificationPanel />
       <div className="metric-grid">
         {statuses.map((s) => (
           <div className="metric" key={s}>

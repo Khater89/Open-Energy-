@@ -10,6 +10,7 @@ import {
   ChevronRight,
   Check,
   PlugZap,
+  BatteryCharging,
 } from "lucide-react";
 import { services, faqs } from "@/lib/content";
 import { ServiceIcon, CTA, FaqList } from "@/components/site";
@@ -17,58 +18,107 @@ import SolarInspiration from "@/components/solar-inspiration";
 export default function Home() {
   return (
     <>
-      <section className="hero">
-        <div
-          className="hero-image"
-          role="img"
-          aria-label="Illustrative view of solar panels in a sunlit landscape"
-        />
-        <div className="hero-shade" />
-        <div className="container hero-content">
-          <div className="hero-eyebrow">
-            <span /> CLEAN ENERGY. OPEN POSSIBILITIES.
+      <section className="hero hero-editorial">
+        <div className="container editorial-grid">
+          <div className="hero-content editorial-copy">
+            <div className="hero-eyebrow">
+              <span /> THE FUTURE LOOKS BRIGHT
+            </div>
+            <h1>
+              Energy.
+              <br />
+              On <span>your</span>
+              <br />
+              terms<span className="headline-dot">.</span>
+            </h1>
+            <p>
+              Less guesswork. More possibility. Thoughtfully designed solar and
+              storage for the places you live and work.
+            </p>
+            <div className="hero-actions">
+              <Link className="button dark" href="/book">
+                Start your solar story <ArrowUpRight size={18} />
+              </Link>
+              <Link className="editorial-contact-link" href="/contact">
+                Let’s talk <ArrowRight size={17} />
+              </Link>
+            </div>
+            <div className="editorial-fit">
+              <span>
+                <Check size={14} /> YOUR SPACE. YOUR SOLUTION.
+              </span>
+              <div>
+                {services.map((s) => (
+                  <Link key={s.slug} href={`/services#${s.slug}`}>
+                    {s.slug}
+                    <ArrowUpRight size={12} />
+                  </Link>
+                ))}
+              </div>
+            </div>
           </div>
-          <h1>
-            A brighter way
-            <br />
-            to power <span>your world.</span>
-          </h1>
-          <p>
-            Harness the power of the sun with solar solutions
-            <br className="desktop-br" /> designed around your home, your
-            business, and your future.
-          </p>
-          <div className="hero-actions">
-            <Link className="button" href="/book">
-              Let’s talk solar <ArrowUpRight size={18} />
-            </Link>
-            <Link className="hero-secondary" href="/services">
-              Explore our solutions <ArrowRight size={17} />
-            </Link>
-          </div>
-          <div className="hero-promise">
-            <span>
-              <Check size={14} /> Tailored to your needs
-            </span>
-            <span>
-              <Check size={14} /> Built for the long run
-            </span>
+          <div className="editorial-visual">
+            <div className="editorial-photo">
+              <img
+                src="/images/solar-rooftop.webp"
+                alt="Illustrative solar concept: a sunlit home with rooftop panels"
+                width={1200}
+                height={800}
+                fetchPriority="high"
+              />
+              <span className="editorial-photo-label">
+                <Sun size={15} /> SOLAR, MADE PERSONAL.
+              </span>
+              <Link
+                href="/book"
+                className="editorial-photo-cta"
+                aria-label="Find your solar fit"
+              >
+                <ArrowUpRight size={30} />
+              </Link>
+              <span className="editorial-image-note">
+                AI-generated illustrative concept
+              </span>
+            </div>
+            <div className="editorial-bottom-cards">
+              <Link href="/services#hybrid" className="editorial-storage">
+                <span className="editorial-card-icon">
+                  <BatteryCharging size={23} />
+                </span>
+                <div>
+                  <small>SOLAR + STORAGE</small>
+                  <strong>
+                    Ready for
+                    <br />
+                    what’s next.
+                  </strong>
+                </div>
+                <ArrowUpRight size={21} />
+              </Link>
+              <Link href="/services" className="editorial-business">
+                <img
+                  src="/images/solar-commercial.webp"
+                  alt="Illustrative concept of a solar-powered commercial roof"
+                  width={1200}
+                  height={800}
+                />
+                <span>
+                  Good energy.
+                  <br />
+                  <strong>For your business.</strong>
+                </span>
+                <ArrowUpRight size={21} />
+              </Link>
+            </div>
           </div>
         </div>
-        <div className="hero-bottom">
-          <div className="container hero-bottom-inner">
-            <span>
-              <Sun size={23} /> A little sunshine.
-              <br />
-              <strong>A world of possibilities.</strong>
-            </span>
-            <span className="hero-image-note">
-              Solar landscape illustration
-            </span>
-            <a href="#solutions" className="scroll-link">
-              DISCOVER MORE <span>↓</span>
-            </a>
-          </div>
+        <div className="container editorial-footnote">
+          <span>
+            <Sun size={16} /> DESIGN. INSTALLATION. POSSIBILITY.
+          </span>
+          <a href="#solutions">
+            FIND YOUR WAY FORWARD <span>↓</span>
+          </a>
         </div>
       </section>
       <section className="value-strip">
@@ -139,12 +189,21 @@ export default function Home() {
                   </span>
                   <span className="service-number">0{i + 1}</span>
                 </div>
-                <div className="mini-system" aria-hidden="true">
-                  <Sun />
-                  <span className="mini-line" />
-                  <div className="mini-panel">▥</div>
-                  <span className="mini-line" />
-                  <ServiceIcon type={s.icon} size={29} />
+                <div className="solution-preview">
+                  <img
+                    src={
+                      s.slug === "on-grid"
+                        ? "/images/solar-rooftop.webp"
+                        : s.slug === "off-grid"
+                          ? "/images/solar-farm.webp"
+                          : "/images/solar-storage.webp"
+                    }
+                    alt={`Illustrative concept for ${s.name.toLowerCase()}`}
+                    width={1200}
+                    height={800}
+                    loading="lazy"
+                  />
+                  <span>Illustrative concept</span>
                 </div>
                 <span className="card-eyebrow">{s.tag}</span>
                 <h3>{s.name}</h3>

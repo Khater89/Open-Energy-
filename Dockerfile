@@ -12,7 +12,7 @@ WORKDIR /app
 ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1
 COPY --from=build --chown=node:node /app/frontend ./frontend
 COPY --chown=node:node backend/schema.sql ./backend/schema.sql
-COPY --chown=node:node scripts/migrate.mjs scripts/database-readiness.mjs scripts/create-admin.mjs scripts/start-production.mjs ./scripts/
+COPY --chown=node:node scripts/migrate.mjs scripts/database-readiness.mjs scripts/create-admin.mjs scripts/start-production.mjs scripts/notification-worker.mjs ./scripts/
 USER node
 EXPOSE 3000
 CMD ["node", "scripts/start-production.mjs"]

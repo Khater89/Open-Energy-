@@ -83,6 +83,15 @@ test(
             [bookingId],
           );
           assert.equal(saved.rows[0].city, "Amman");
+          assert.equal(
+            (
+              await db.query(
+                "SELECT count(*)::integer AS n FROM notification_outbox WHERE booking_id=$1",
+                [bookingId],
+              )
+            ).rows[0].n,
+            1,
+          );
         },
       );
       await t.test("contact is saved and persisted", async () => {
@@ -131,6 +140,24 @@ test(
         assert.ok(d.requests.some((r) => r.id === bookingId));
         assert.ok(d.requests.some((r) => r.id === contactId));
       });
+      await t.test(
+        "notification status is protected and does not expose sending credentials",
+        async () => {
+          assert.equal(
+            (await fetch(base + "/api/admin/notifications")).status,
+            401,
+          );
+          const response = await fetch(base + "/api/admin/notifications", {
+            headers: { Cookie: cookie },
+          });
+          assert.equal(response.status, 200);
+          const data = await response.json();
+          assert.ok(Array.isArray(data.setup.missing));
+          assert.equal("RESEND_API_KEY" in data.setup, false);
+          assert.ok(data.recent.some((j) => j.request_id === bookingId));
+          assert.ok(data.recent.some((j) => j.request_id === contactId));
+        },
+      );
       const update = {
         id: bookingId,
         kind: "booking",
@@ -184,6 +211,24 @@ test(
           body: JSON.stringify({ ...update, version: 2 }),
         });
         assert.equal(r.status, 403);
+      });
+      await t.test("viewers cannot retry email notifications", async () => {
+        const job = (
+          await db.query(
+            "SELECT id FROM notification_outbox WHERE booking_id=$1",
+            [bookingId],
+          )
+        ).rows[0];
+        assert.equal(
+          (
+            await submit(
+              "/api/admin/notifications",
+              { id: job.id },
+              { Cookie: cookie },
+            )
+          ).status,
+          403,
+        );
       });
       await t.test("logout revokes the server session", async () => {
         assert.equal(

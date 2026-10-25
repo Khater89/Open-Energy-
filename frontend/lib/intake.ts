@@ -120,6 +120,14 @@ export async function intake(req: NextRequest, kind: "booking" | "contact") {
           fingerprint,
         ],
       );
+    await client.query(
+      "INSERT INTO notification_outbox(kind,booking_id,contact_id) VALUES($1,$2,$3) ON CONFLICT DO NOTHING",
+      [
+        kind,
+        kind === "booking" ? saved.rows[0].id : null,
+        kind === "contact" ? saved.rows[0].id : null,
+      ],
+    );
     await client.query("COMMIT");
     return NextResponse.json(
       { id: saved.rows[0].id, status: "received" },

@@ -33,3 +33,18 @@ CREATE TABLE IF NOT EXISTS rate_limits (bucket text PRIMARY KEY,hits integer NOT
 CREATE TABLE IF NOT EXISTS audit_log (id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,user_id uuid REFERENCES admin_users(id),entity_type text NOT NULL,entity_id uuid NOT NULL,old_status text NOT NULL,new_status text NOT NULL,created_at timestamptz NOT NULL DEFAULT now());
 CREATE INDEX IF NOT EXISTS booking_status_created ON consultation_bookings(status,created_at DESC);
 CREATE INDEX IF NOT EXISTS contact_status_created ON contact_requests(status,created_at DESC);
+
+CREATE TABLE IF NOT EXISTS notification_outbox (
+ id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+ kind text NOT NULL CHECK(kind IN ('booking','contact')),
+ booking_id uuid REFERENCES consultation_bookings(id) ON DELETE CASCADE,
+ contact_id uuid REFERENCES contact_requests(id) ON DELETE CASCADE,
+ status text NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','sending','accepted','failed')),
+ attempts integer NOT NULL DEFAULT 0,
+ next_attempt_at timestamptz NOT NULL DEFAULT now(), locked_until timestamptz, lock_token uuid,
+ last_error text, provider_message_id text, accepted_at timestamptz,
+ created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now(),
+ CHECK((kind='booking' AND booking_id IS NOT NULL AND contact_id IS NULL) OR (kind='contact' AND contact_id IS NOT NULL AND booking_id IS NULL)),
+ UNIQUE(booking_id), UNIQUE(contact_id)
+);
+CREATE INDEX IF NOT EXISTS notification_ready ON notification_outbox(status,next_attempt_at);

@@ -33,3 +33,12 @@ Added a bounded retry for transient PostgreSQL DNS, connection refusal and initi
 - Additional public-experience checks passed for both phone/WhatsApp destinations, email links, WhatsApp keyboard and outside-click dismissal, concept labels, keyboard image navigation, modal focus containment, scroll reveal, reading progress, reduced-motion changes and content visibility with JavaScript disabled. Expanded WhatsApp and lightbox accessibility checks returned no violations.
 - Reference research and image provenance are documented in DESIGN-NOTES.md. The new images are illustrative concepts approved by the owner, not verified company installations.
 - These are local browser/build checks; the new Railway deployment must still complete before the public site shows the update.
+
+## Editorial redesign and new-request email outbox
+
+- Production build and TypeScript checks passed. All eight public/staff routes passed browser checks at 360/768/1440px; booking/contact saves, staff login/status/logout and public contact/gallery/motion checks passed.
+- Automated WCAG A/AA scans returned no violations in the checked public/staff pages and the expanded WhatsApp/lightbox states.
+- **41 Node tests passed, 0 failed, 0 skipped** with integration configuration supplied. Notification tests covered atomic intake queue insertion, duplicate-submission protection, isolated PostgreSQL outbox concurrency, transient retries with stable provider idempotency keys, permanent rejection, expired/stale leases, attempt limits, request-deletion cascade, HTML escaping, protected metadata and viewer retry denial.
+- A local HTTP provider fixture verified request serialization and API-acceptance handling without sending a real email. Missing credentials prevent all sender calls.
+- The production supervisor started the email worker and restarted it after an intentional stop while the web health check remained HTTP 200. Dockerfile validation passed with the worker included in the image.
+- **Actual Resend acceptance and inbox delivery remain unverified** because no sending key or allowed sender is configured in the local environment. The owner must add the private Railway sender variables and perform the live test in EMAIL-NOTIFICATIONS.md. Accepted API requests are distinguished from confirmed inbox delivery throughout the staff UI.
