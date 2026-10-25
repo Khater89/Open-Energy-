@@ -21,3 +21,7 @@ Screenshots are in `/workspace/artifacts/open-energy-desktop.png` and `/workspac
 ## Railway validation correction
 
 Removed the local-only `proxy_ca` build-secret mount from the production Dockerfile. `docker build --check .` passes with no warnings on the corrected file. This is a Dockerfile validation check; a successful new Railway build is not yet verified. Runtime application logic and database initialization are unchanged.
+
+## Database startup readiness
+
+Added a bounded retry for transient PostgreSQL DNS, connection refusal and initialization errors. Credential and schema errors fail without retry. All 25 validation/integration/readiness checks pass with the running app/database configured. A real PostgreSQL migration also recovered through a local endpoint that became available after startup. Dockerfile validation passes with the new readiness helper included in the runtime image. A successful connection to the user's Railway PostgreSQL service remains unverified and depends on the service state and correct variable reference.

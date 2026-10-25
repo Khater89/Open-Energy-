@@ -29,8 +29,8 @@ if (process.env.SITE_URL) {
     process.exit(1);
   }
 } else {
-  console.warn(
-    "Generate a Railway public domain and redeploy, or set SITE_URL, before accepting form submissions.",
+  console.log(
+    "Setup notice: generate a Railway public domain and redeploy, or set SITE_URL, before accepting form submissions.",
   );
 }
 const port = Number(process.env.PORT || 3000);

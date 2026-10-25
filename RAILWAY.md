@@ -31,3 +31,9 @@ No Railway deployment or public domain is created merely by committing these fil
 ## Dockerfile validation
 
 The production Dockerfile does not require any build secrets or `RUN --mount` directives. Do not add `proxy_ca` to Railway variables: that certificate was only needed by the local onboarding network, not Railway. When retrying a validation failure, deploy the latest `main` commit rather than rebuilding an older failed commit. Keep the service root at `/`.
+
+## PostgreSQL refuses a connection
+
+`ENOTFOUND` followed by `ECONNREFUSED` means the configured host became resolvable, but no PostgreSQL listener accepted the connection on the configured port. This does not establish that the password is wrong. The startup migration waits up to about 65 seconds for transient database DNS/connectivity or PostgreSQL-initialization errors. Invalid credentials, missing databases and schema errors fail immediately; no web server is marked ready before the schema is available.
+
+Check the PostgreSQL service itself is deployed and Online in the **same project and environment**. In the web service, set `DATABASE_URL` using **Add Reference → the PostgreSQL service → DATABASE_URL**; do not select the web service’s `RAILWAY_PRIVATE_DOMAIN`. Do not hardcode internal IP addresses. If PostgreSQL is Failed or Crashed, read its logs and fix that service before redeploying the website. The separate `SITE_URL` setup notice does not cause database connection refusal: generate the web service’s public domain and set the exact HTTPS origin before testing forms.
